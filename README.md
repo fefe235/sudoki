@@ -1,2 +1,3 @@
-# sudoki-
-# sudoki
+### sudoki?
+
+un sudoku trés originale
