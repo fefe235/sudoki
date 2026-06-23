@@ -1,0 +1,641 @@
+window.onload = function (){
+    var c = new fabric.Canvas('canvas', {selectable:false});
+    var width = c.get('width')
+    var height= c.get('height')
+var blockW = width/9;
+var blockH = height/9;
+var coup = 0;
+var miniBlockH = blockH/2
+var miniBlockW = blockW/2
+var spaceW= blockW/10;
+var spaceH= blockH/10;
+var miniSpaceW= spaceW/3;
+var miniSpaceH= spaceH/3;
+var lvl =29;
+var sto;
+var bigbool = false
+var boo1;
+var t = [];
+var boo2;
+var boo3;
+var boo4;
+var boo5;
+var boolListen = true;
+
+var win = false;
+var ii = 4 ;
+var jj = 4;
+var coord = [0,1,2,2,3,3,0,0,0,1,1,1,2,2,2,2,3,3,3,3,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,0,0,0,0,0,0]
+var cou = 0;
+blockWi = blockW -2*spaceW;
+blockHe =blockH -2* spaceH;
+var store = [[],[],[],[],[],[],[],[],[]];
+document.getElementById('button').style.display = "block";
+document.getElementById('canvas').style.display = "none";
+
+tuto()
+
+function tuto(){
+   
+    document.getElementById('demo4').style.display = "none"
+    document.getElementById('demo0').style.display = "block"
+    boo1 =setTimeout(function(){document.getElementById('demo0').style.display = "none"
+    document.getElementById('demo1').style.display = "block"},5000)
+    boo2 =setTimeout(function(){document.getElementById('demo1').style.display = "none"
+    document.getElementById('demo2').style.display = "block"},10000)
+    boo3 =setTimeout(function(){document.getElementById('demo2').style.display = "none"
+    document.getElementById('demo3').style.display = "block"},15000)
+    boo4 =setTimeout(function(){document.getElementById('demo3').style.display = "none"
+    document.getElementById('demo4').style.display = "block"},20000)
+    boo5 =setTimeout(tuto,25000);
+}
+
+document.getElementById('button').onclick = function () {
+    clearTimeout(boo1)
+    clearTimeout(boo2)
+    clearTimeout(boo3)
+    clearTimeout(boo4)
+    clearTimeout(boo5)
+document.getElementById('canvas').style.display = "block";
+document.getElementById('demo0').style.display = "none";
+document.getElementById('demo1').style.display = "none";
+document.getElementById('demo2').style.display = "none";
+document.getElementById('demo3').style.display = "none";
+document.getElementById('demo4').style.display = "none";
+init()
+color()
+for (let o = 0; o < 81 -lvl; o++) {
+    setTimeout(computer,50 *o)
+}
+setTimeout(x,50 *(81 -lvl))
+setTimeout(allRemakeInit,50 *(82 -lvl))
+setTimeout(startListen,50 *(83 -lvl))
+document.getElementById('button').style.display = "none";
+    document.getElementById('buttoN').style.display = "none";
+}
+function x(){
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if(store[i][j].num==0 && store[i][j].stop == false){
+                var blockB= new fabric.Rect({width:blockWi, height:blockHe, top:j*blockH + spaceH, left:i*blockW+ spaceW, fill:"#fff",stroke:"#000000",selectable:false});
+                    c.add(blockB)
+                    var text = new fabric.Text('X', { left: i*blockW+ 2*spaceW, top: j*blockH ,selectable:false});
+                    c.add(text);
+                    store[i][j].error = true;
+            }
+}}}
+function init(){
+    document.getElementById('canvas').style.opacity = 0.7;
+store = [[],[],[],[],[],[],[],[],[]];
+for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+        store[i][j]= {num:0,pos:0,stop:false, red: false,compute:false,error:false};
+    }}}
+    function color ( ){
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                
+        if (j == 3 && i != 3 && i != 4 && i != 5 || j == 4 && i != 3 && i != 4 && i != 5 || j == 5 && i != 3 && i != 4 && i != 5) {
+            let block = new fabric.Rect({width:blockW ,height:blockH ,top:i*blockH,left:j*blockW,fill:"red",stroke:"#000000",selectable:false});
+            c.add(block)
+            if (i < 3){
+                store[i][j].pos= 2;
+            }else{
+                store[i][j].pos= 8;
+            }
+        }
+        if (j == 6 && i != 2 && i != 1 && i != 0 || j == 7 && i != 2 && i != 1 && i != 0 || j == 8 && i != 2 && i != 1 && i != 0) {
+            if (i < 6){
+                let block = new fabric.Rect({width:blockW ,height:blockH ,top:i*blockH,left:j*blockW,fill:"red",stroke:"#000000",selectable:false});
+                c.add(block)
+                store[i][j].pos= 6;
+            }
+        }
+        if (j == 6|| j == 7|| j == 8) {
+            if (i > 5){
+                store[i][j].pos= 9;
+            }
+        }
+        if (j == 6 || j == 7 || j == 8) {
+            if (i < 3){
+                store[i][j].pos= 3;
+            }
+        }
+        if (j == 0 || j == 2 || j == 1) {
+            if (i > 3){
+                store[i][j].pos= 7;
+            }
+        }
+        if (j == 3 && i != 2 && i != 1 && i != 0 || j == 4 && i != 2 && i != 1 && i != 0 || j == 5 && i != 2 && i != 1 && i != 0) {
+            if (i < 6){
+                store[i][j].pos= 5;
+            }
+        }
+        if (j == 2 && i != 2 && i != 1 && i != 0 || j == 1 && i != 2 && i != 1 && i != 0 || j == 0 && i != 2 && i != 1 && i != 0) {
+            if (j < 3 && i < 6){
+                let block = new fabric.Rect({width:blockW ,height:blockH ,top:i*blockH,left:j*blockW,fill:"red",stroke:"#000000",selectable:false});
+                c.add(block)
+                store[i][j].pos= 4;
+            }
+        }
+        if (j == 2 || j == 1 || j == 0) {
+            if (j < 3 && i < 3){
+                store[i][j].pos= 1;
+            }
+        }
+        
+    }
+}
+}
+function allRemakeInit (){
+    
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            remake(i,j,i*blockW,j*blockH)
+        }}
+        boolListen = true;
+ }
+ function remake (i,j,xx,yy) {
+    if(store[i][j].error== false){
+        var co = (store[i][j].num%9)+1;
+    }else{
+        return
+    }
+    var com = 1;
+    var bool = true;
+    var tem = co;
+    var temTab = [1,2,3,4,5,6,7,8,9]
+    bonNum()
+    function bonNum(){
+        bool = false;
+        for(let c= 0;c<9;c++){
+            if(co== store[c][j].num){
+                if(c!= i){
+                    for(let a = 0; a<temTab.length;a++){
+                        if(temTab[a]==co){
+                            let t = temTab[temTab.length-1];
+                            temTab[temTab.length-1]=temTab[a];
+                            temTab[a] = t;
+                            temTab.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++
+                    
+                }
+            }if(co== store[i][c].num && bool == false ){
+                if(c!= j){
+                    for(let a = 0; a<temTab.length;a++){
+                        if(temTab[a]==co){
+                            let t = temTab[temTab.length-1];
+                            temTab[temTab.length-1]=temTab[a];
+                            temTab[a] = t;
+                            temTab.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++
+
+                }
+            }
+            if (bool == true){
+                if(com >=100){
+                    break;}
+                    else{
+                    bool = false;
+                    }
+                    c=-1;
+            }
+        }
+        if(com <100){
+        for (let o = 0; o < 9; o++) {    
+            for (let p = 0; p < 9; p++) {
+                if(store[o][p].num != 0){
+                    if(co== store[o][p].num && store[i][j].pos== store[o][p].pos){
+                        if( i != o || j !=p){
+                            for(let a = 0; a<temTab.length;a++){
+                                if(temTab[a]==co){
+                                    let t = temTab[temTab.length-1];
+                                    temTab[temTab.length-1]=temTab[a];
+                                    temTab[a] = t;
+                                    temTab.pop();
+                                }
+                            }
+                            co= (co%9)+1;
+                            bool = true;
+                            com++;
+                            
+                        }
+                    }
+                }
+                if (com >= 100){
+                    break
+                    
+                }
+            }
+            if (com >= 100){
+                bool = false;
+                break
+                
+            }
+        }
+        if (temTab.length == 1 && store[i][j].num != co || com >= 100){
+            return;
+        }
+        if(bool == true){
+            if (com < 100){
+                
+            bonNum()
+            }
+            return
+        }
+    }}
+        if (com >= 100 || temTab.length == 1){
+            let blockB= new fabric.Rect({width:miniBlockW, height:miniBlockW, top:j*blockH + blockH - miniBlockH + miniSpaceH, left:i*blockW+ blockW - miniBlockW + miniSpaceW, fill:"#fff",stroke:"#000000",selectable:false});
+             c.add(blockB)
+            let text = new fabric.Text('0', { width:miniBlockW, height:miniBlockW,left: x + 2*miniSpaceW, top: y -3*miniSpaceH,fontSize:"33",selectable:false});
+            c.add(text);
+        }else{
+        if( store[i][j] == undefined){
+            co= tem;
+        }        
+        var x = i*blockW+ blockW - miniBlockW + miniSpaceW
+        var y = j*blockH + blockH - miniBlockH + miniSpaceH
+            if(store[i][j].num != co){
+                let blockB= new fabric.Rect({width:miniBlockW, height:miniBlockW, top:j*blockH + blockH - miniBlockH + miniSpaceH, left:i*blockW+ blockW - miniBlockW + miniSpaceW, fill:"#fff",stroke:"#000000",selectable:false});
+             c.add(blockB)
+            let text = new fabric.Text((co).toString(), { width:miniBlockW, height:miniBlockW,left: x + 2*miniSpaceW, top: y -3*miniSpaceH,fontSize:"33",selectable:false});
+            c.add(text);               
+               
+            }
+        }
+   function del () {
+        c._objects.pop();
+        c._objects.pop();
+
+    }}
+ function startListen(){
+    listen = c.on('mouse:down', function listen(target) {
+    //x colone y lign
+    if(boolListen == true){
+        boolListen = false;
+    
+    var x = target.pointer.x - target.pointer.x%blockW + 3*spaceW;
+    var y = target.pointer.y - target.pointer.y%blockH;
+    var i = Math.round((x - 4*spaceW) / blockW);
+    var j = Math.round((y - spaceH) / blockH);
+    if(store[i][j].error == true){
+        boolListen = true;
+        return;
+    }
+    if(store[i][j].num== 0){
+    var co = 1;
+    }else{
+        var co = (store[i][j].num%9)+1;
+    }
+    var com = 1;
+    var bool = true;
+    var tem = co;
+    var temTab = [1,2,3,4,5,6,7,8,9];
+    bonNum()
+    function bonNum(){
+        bool = false;
+        for(let c= 0;c<9;c++){
+            if(co== store[c][j].num){
+                if(c!= i){
+                    for(let a = 0; a<temTab.length;a++){
+                        if(temTab[a]==co){
+                            let t = temTab[temTab.length-1];
+                            temTab[temTab.length-1]=temTab[a];
+                            temTab[a] = t;
+                            temTab.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++;
+                    
+                    
+                }
+            }if(co== store[i][c].num && bool == false ){
+                if(c!= j){
+                    for(let a = 0; a<temTab.length;a++){
+                        if(temTab[a]==co){
+                            let t = temTab[temTab.length-1];
+                            temTab[temTab.length-1]=temTab[a];
+                            temTab[a] = t;
+                            temTab.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++;
+                    
+
+                }
+            }
+            if (bool == true){
+                if(com >=100){
+                    break;}
+                    else{
+                    bool = false;
+                    }
+                    c=-1;
+            }
+        }
+
+        store[i][j].num=co
+        if(com <100){
+        for (let o = 0; o < 9; o++) {    
+            for (let p = 0; p < 9; p++) {
+                if(store[o][p].num != 0){
+                    if(store[i][j].num== store[o][p].num && store[i][j].pos== store[o][p].pos){
+                        if( i != o || j !=p){
+                            for(let a = 0; a<temTab.length;a++){
+                                if(temTab[a]==store[i][j].num){
+                                    let t = temTab[temTab.length-1];
+                                    temTab[temTab.length-1]=temTab[a];
+                                    temTab[a] = t;
+                                    temTab.pop();
+                                }
+                            }
+                            store[i][j].num= (store[i][j].num%9)+1;
+                            bool = true;
+                            com++;
+                            
+                            
+                        }
+                    }
+                }
+                if (com >= 100){
+                    break
+                    
+                }
+            }
+            if (com >= 100){
+                bool = false;
+                break
+                
+            }
+        }
+        if (temTab.length == 1 && store[i][j].num!= 0 || com >= 100){
+            return;
+        }
+
+        if(bool == true){
+            co = store[i][j].num
+            if (com < 100){
+    
+            bonNum()
+            }
+            return
+        }
+    }}
+        if( store[i][j] == undefined){
+            store[i][j].num= tem;
+        }
+        if(temTab.length == 1){
+            boolListen = true;
+            return;
+        }
+        if (store[i][j].stop == true && temTab.length <= 1){
+    
+            
+        boolListen = true;
+        win = false
+    
+    
+            return;
+        }else{
+            if(store[i][j].red == true ){
+                
+
+                win = true;
+                store[i][j].red =false;
+            }
+                let blockB= new fabric.Rect({width:blockWi, height:blockHe, top:j*blockH + spaceH, left:i*blockW+ spaceW, fill:"#fff",stroke:"#000000",selectable:false});
+                    c.add(blockB)
+                    var text = new fabric.Text((store[i][j].num).toString(), { left: x, top: y,selectable:false});
+                    c.add(text);
+
+                
+                store[i][j].compute = false;
+             
+            
+}
+for (let o = 0; o < 9; o++) {    
+    for (let p = 0; p < 9; p++) {
+        if(store[o][p].red == true){
+            
+            win = false
+        
+    } 
+}}
+    if (win == true){
+        lvlUp()
+    }
+    allRemakeInit()
+    
+    
+    
+}});}
+function computer(){
+        
+    var temTabb = [1,2,3,4,5,6,7,8,9];
+    var y  =jj*blockH;
+    var x = ii*blockW + 3*spaceW ;
+    if(store[ii][jj].num== 0){
+        var co = 1;
+        }else{
+            var co = (store[ii][jj].num%9)+1;
+        }
+    var com = 1;
+    var bool = true;
+    
+    bonCompute()
+    function bonCompute(){
+        bool = false;
+        for(let c= 0;c<9;c++){
+            if(store[c][jj]){
+            if(co== store[c][jj].num){
+                if(c!= ii){
+                    for(let a = 0; a<temTabb.length;a++){
+                        if(temTabb[a]==co){
+                            let t = temTabb[temTabb.length-1];
+                            temTabb[temTabb.length-1]=temTabb[a];
+                            temTabb[a] = t;
+                            temTabb.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++
+                }
+            }}else{
+               com = 28;
+            }
+            if(store[ii][c]){
+            if(co== store[ii][c].num && bool == false ){
+                if(c!= jj){
+                    for(let a = 0; a<temTabb.length;a++){
+                        if(temTabb[a]==co){
+                            let t = temTabb[temTabb.length-1];
+                            temTabb[temTabb.length-1]=temTabb[a];
+                            temTabb[a] = t;
+                            temTabb.pop();
+                        }
+                    }
+                    co=(co%9)+1;
+                    bool = true;
+                    com++
+                }
+            }}else{
+                com = 28;
+            }
+            if (bool == true){
+                
+                if (com >= 27){
+                    break;
+                }else{
+                    bool = false;
+                    c = -1;
+                }
+            }
+        }
+        store[ii][jj].num=co
+        if(com <27){
+        for (let o = 0; o < 9; o++) {    
+            for (let p = 0; p < 9; p++) {
+                if(store[o][p].num != 0){
+                    if(store[ii][jj].num== store[o][p].num && store[ii][jj].pos== store[o][p].pos){
+                        if( ii != o || jj !=p){
+                            for(let a = 0; a<temTabb.length;a++){
+                                if(temTabb[a]==store[ii][jj].num){
+                                    let t = temTabb[temTabb.length-1];
+                                    temTabb[temTabb.length-1]=temTabb[a];
+                                    temTabb[a] = t;
+                                    temTabb.pop();
+                                }
+                            }
+                            store[ii][jj].num= (store[ii][jj].num%9)+1;
+                            bool = true;
+                            com++;
+                        }
+                    }
+                }
+                if (com >= 27){
+                    break;
+                }
+            }
+            if (com >= 27){
+                bool = false;
+                break;
+            }
+        }
+        if (temTabb.length == 1 && store[ii][jj].num != co || com >= 27){
+            bigbool = true
+            return;
+        }
+        if (bool == true){
+            co = store[ii][jj].num
+            bonCompute()
+            return;
+        }
+    }}  
+    if (com >= 27 || temTabb.length == 1 && store[ii][jj].num != co ){
+        let blockB= new fabric.Rect({width:blockWi, height:blockHe, top:jj*blockH + spaceH, left:ii*blockW+ spaceW, fill:"#fff",stroke:"#000000",selectable:false});
+        c.add(blockB)
+        var text = new fabric.Text('?', { left: x, top: y,selectable:false,fill: 'green'});
+        c.add(text);
+        store[ii][jj].num = 0;
+        store[ii][jj].compute = true;
+        store[ii][jj].red = true;
+        store[ii][jj].stop = true;
+        bigbool = true
+        win = false
+        }else{
+                    
+                    let blockB= new fabric.Rect({width:blockWi, height:blockHe, top:jj*blockH + spaceH, left:ii*blockW+ spaceW, fill:"#fff",stroke:"#000000",selectable:false});
+                    c.add(blockB)
+                    var text = new fabric.Text((store[ii][jj].num).toString(), { left: x, top: y,selectable:false,fill: 'red'});
+                    c.add(text);
+                    store[ii][jj].compute = true;
+                    store[ii][jj].stop = false;
+                    cou++;
+                    store[ii][jj].cou = cou;
+                    
+                   
+            }
+            t.push(store[ii][jj].red)
+            next(cou)                
+
+}
+function next (couu){
+    
+    if(coord[couu -1] == 0){
+        ii++;
+    }
+    if(coord[couu -1] == 1){
+        jj++
+    }
+    if(coord[couu -1] == 2){
+        ii--;
+    }
+    if(coord[couu -1] == 3){
+        jj--;
+    }
+}
+
+
+function gameOver(){
+   var canvas =document.getElementById('canvas')
+   canvas.style.display = "none";
+   document.getElementById('lvl').style.display = "block";
+   document.getElementById('button').style.display = "block";
+   document.getElementById('lvl').innerHTML= "lvl:"+31 - lvl+"GAME OVER cliquer pour jouer";
+   document.getElementById('button').onclick = function () {
+       window.location.reload()
+   }
+}
+function lvlUp (){
+    var canvas =document.getElementById('canvas')
+    canvas.style.display = "none";
+    document.getElementById('lvl').style.display = "block";
+   document.getElementById('button').style.display = "block";
+
+    document.getElementById('lvl').innerHTML="level "+ (31-lvl)+ " click play";
+    b = true;
+    clearTimeout(sto)
+    document.getElementById('button').onclick = function () {
+        if(b == true){
+        lvl--;
+        ii = 4;
+        jj = 4;
+        cou = 0;
+        win = false;
+        canvas.style.display = "block";
+        document.getElementById('lvl').style.display = "none";
+   document.getElementById('button').style.display = "none";
+
+        c.__eventListeners = {};
+        c.clear()
+        init()
+color()
+for (let o = 0; o < 81 -lvl; o++) {
+    setTimeout(computer,50 *o)
+    
+
+}
+setTimeout(x,50 *(81 -lvl))
+setTimeout(allRemakeInit,50 *(82 -lvl))
+setTimeout(startListen,50 *(83 -lvl)) 
+
+        b = false
+        }
+    }
+ }
+
+
+}
